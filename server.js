@@ -76,12 +76,13 @@ routeMappings.forEach(({ path: rPath, route }) => {
   app.use(rPath, route);
 });
 
-// Health check
-app.get(['/api/health', '/health'], (req, res) => {
+// Health check & Root API info
+app.get(['/', '/api', '/api/health', '/health'], (req, res) => {
   res.status(200).json({
     status: 'online',
     brand: 'Sanjay Jewellers',
     domain: 'sanjayjwellers.com',
+    message: '✨ Sanjay Jewellers API is running successfully',
     timestamp: new Date().toISOString(),
   });
 });
