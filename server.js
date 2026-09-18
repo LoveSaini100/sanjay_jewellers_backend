@@ -61,16 +61,23 @@ app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/collections', collectionRoutes);
-app.use('/api/enquiries', enquiryRoutes);
-app.use('/api/appointments', appointmentRoutes);
-app.use('/api/admin', statsRoutes);
+const routeMappings = [
+  { path: '/auth', route: authRoutes },
+  { path: '/products', route: productRoutes },
+  { path: '/categories', route: categoryRoutes },
+  { path: '/collections', route: collectionRoutes },
+  { path: '/enquiries', route: enquiryRoutes },
+  { path: '/appointments', route: appointmentRoutes },
+  { path: '/admin', route: statsRoutes },
+];
+
+routeMappings.forEach(({ path: rPath, route }) => {
+  app.use(`/api${rPath}`, route);
+  app.use(rPath, route);
+});
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get(['/api/health', '/health'], (req, res) => {
   res.status(200).json({
     status: 'online',
     brand: 'Sanjay Jewellers',

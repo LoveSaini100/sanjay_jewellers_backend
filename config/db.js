@@ -2,12 +2,16 @@ const mongoose = require('mongoose');
 
 let isConnected = false;
 
+const DEFAULT_MONGO_URI =
+  'mongodb+srv://sanjaysainisre2026_db_user:0nvyTs7IQoUPFvXq@cluster1.k7xrfm2.mongodb.net/new_sanjay_jewellers?retryWrites=true&w=majority&appName=Cluster1';
+
 const connectDB = async () => {
   if (mongoose.connection.readyState >= 1 || isConnected) {
     return true;
   }
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/new_sanjay_jewellers', {
+    const uri = process.env.MONGODB_URI || DEFAULT_MONGO_URI;
+    const conn = await mongoose.connect(uri, {
       serverSelectionTimeoutMS: 5000,
     });
     isConnected = true;
